@@ -4,7 +4,15 @@
 
 學生會為一位用家設計一塊香港花階磚，過程中經歷設計思維（同理、定義、構思、原型、測試），同時學習計算思維（拆解、模式識別、抽象化、演算法），最後匯出 STL 檔，用學校的 3D 打印機打印成杯墊、迷你磚或鎖匙扣。
 
-教學建議、主題選擇、評估量表及 3D 打印安排見 **[docs/教學設計建議.md](docs/教學設計建議.md)**。
+**學生網址：https://ken9991033.github.io/-/**（先按下面「開啟方法」開啟 GitHub Pages）
+
+## 教材
+
+| 檔案 | 內容 |
+|---|---|
+| [docs/花階磚設計工作室_教學簡報.pptx](docs/花階磚設計工作室_教學簡報.pptx) | 老師教學簡報（42 頁）：理論知識＋平台每一步的圖文操作說明，每頁附講者備註及建議時間 |
+| [docs/花階磚設計工作室_教案.docx](docs/花階磚設計工作室_教案.docx) | 教案（23 頁）：學習目標、理論重點、課次 5／6 分鐘流程表、提問及答案、評估量表、3D 打印安排；附錄有圖文使用流程、用家卡、可列印出口卡 |
+| [docs/教學設計建議.md](docs/教學設計建議.md) | 平台設計理念、主題選擇、評估量表及 3D 打印安排 |
 
 ## 八個步驟
 
@@ -24,7 +32,14 @@
 ## 開啟方法
 
 **方法一：網上版（建議）**
-把這個 repository 放上 GitHub Pages（Settings → Pages → 選擇分支 → Save），學生用瀏覽器開啟網址即可。也可以把整個資料夾放到學校網站伺服器。
+用 GitHub Pages 發佈（只需做一次，約 1 分鐘）：
+
+1. 在 GitHub 打開這個 repository，按 **Settings → Pages**。
+2. 「Build and deployment」的 **Source** 選 **Deploy from a branch**。
+3. **Branch** 選 `claude/eloquent-brahmagupta-xsy0fz`，資料夾選 **/ (root)**，按 **Save**。
+4. 等 1–2 分鐘，學生便可開啟 **https://ken9991033.github.io/-/**（Pages 頁面頂部會顯示網址）。
+
+repository 根目錄的 `.nojekyll` 讓 GitHub Pages 直接發佈檔案，不經 Jekyll 處理。也可以把整個資料夾放到學校網站伺服器。
 
 **方法二：離線單一檔案**
 `dist/hk-tile-studio.html` 已包含所有程式（連 three.js），不用上網。複製到學生電腦或共用磁碟，用 Chrome 或 Edge 雙擊開啟即可。
@@ -65,7 +80,7 @@ js/teacher.js         教師工具
 lib/three.min.js      three.js r149（MIT 授權）
 tools/build.py        生成離線單一檔案
 dist/                 生成的檔案
-docs/                 教學設計建議
+docs/                 教學簡報（PPTX）、教案（DOCX）、教學設計建議
 ```
 
 ## 3D 打印
