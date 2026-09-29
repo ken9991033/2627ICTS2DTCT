@@ -98,7 +98,38 @@
     return (raw || '學生').replace(/[\\/:*?"<>|\s]+/g, '');
   };
 
-  App.download = function (name, data, type) {
+  /* 下載：一般瀏覽器用 <a download>；在 Claude 預覽內改用平台的 downloads 功能
+   * （預覽平台不接受 .stl，所以會把 STL 放進 ZIP 檔） */
+  const VIEWER_OK = /\.(gif|png|jpe?g|webp|mp4|webm|txt|json|md|docx|pptx|epub|csv|ttf|html|svg|pdf|xlsx|zip)$/i;
+  let viewerDl = null;
+  function viewerDownloads() {
+    if (!global.claude || typeof global.claude.use !== 'function') return Promise.resolve(null);
+    if (!viewerDl) viewerDl = global.claude.use('downloads').catch(() => null);
+    return viewerDl;
+  }
+  App.viewerDownloads = viewerDownloads;
+
+  App.download = async function (name, data, type) {
+    const cap = await viewerDownloads();
+    if (cap) {
+      let fname = name, payload = data;
+      if (!VIEWER_OK.test(fname)) {
+        const bytes = data instanceof Blob ? new Uint8Array(await data.arrayBuffer())
+          : typeof data === 'string' ? new TextEncoder().encode(data) : new Uint8Array(data);
+        payload = global.TileMesh.makeZip([{ name: fname, data: bytes }]);
+        fname = fname.replace(/\.[^.]+$/, '') + '.zip';
+      }
+      try {
+        await cap.save({ filename: fname, data: payload });
+        if (fname !== name) App.toast('已把 ' + name + ' 放進 ZIP 檔，解壓後即可使用。', 'ok');
+      } catch (e) {
+        const code = e && e.code;
+        if (code === 'declined') return;
+        if (code === 'rate_limited') App.toast('上一個下載還在等待確認，請稍後再試。');
+        else App.toast('這個預覽不能下載檔案，請在學校網站或離線版開啟。');
+      }
+      return;
+    }
     const blob = data instanceof Blob ? data : new Blob([data], { type: type || 'application/octet-stream' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -534,7 +565,11 @@
     const saved = loadLocal();
     if (saved && saved.app === 'hk-tile-studio') App.P = mergeProject(saved);
     Sound.on = !!(C.options && C.options.sound);
-    if (App.framed) $('#frameNote').hidden = false;
+    if (App.framed) {
+      $('#frameNote').hidden = false;
+      // 在 Claude 預覽內：如果平台容許下載，就不用顯示提示
+      viewerDownloads().then(cap => { if (cap) $('#frameNote').hidden = true; });
+    }
 
     // 品牌小磚
     const bt = $('#brandTile');
