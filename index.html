@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="zh-HK">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>花階磚設計工作室</title>
+<meta name="description" content="中二 ICT 設計與計算思維：訪問用家、拆解花階磚圖案、用演算法設計，再匯出 3D 打印模型。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chiron+GoRound+TC:wght@400;600;700&family=Chiron+Hei+HK:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app" id="app">
+  <header class="topbar">
+    <div class="brand">
+      <canvas class="brand-tile" id="brandTile" width="80" height="80" aria-hidden="true"></canvas>
+      <div class="brand-text">
+        <strong>花階磚設計工作室</strong>
+        <span id="brandSub">中二 ICT｜設計與計算思維</span>
+      </div>
+    </div>
+    <nav class="path" id="path" aria-label="學習步驟"></nav>
+    <div class="top-tools">
+      <button class="chip" id="btnStudent" type="button" hidden></button>
+      <button class="icon-btn" id="btnSound" type="button" aria-pressed="false" title="音效：關">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path class="sound-on" d="M16 8.5a4.5 4.5 0 0 1 0 7M18.5 6a8 8 0 0 1 0 12"/><path class="sound-off" d="M16.5 9.5l5 5m0-5l-5 5"/></svg>
+        <span class="sr">音效</span>
+      </button>
+      <div class="menu-wrap">
+        <button class="icon-btn" id="btnFile" type="button" aria-haspopup="true" aria-expanded="false" title="存檔">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h11l3 3v15H5z"/><path d="M8 3v5h7V3M8 21v-7h8v7"/></svg>
+          <span class="sr">存檔</span>
+        </button>
+        <div class="menu" id="fileMenu" role="menu" hidden>
+          <button type="button" role="menuitem" data-act="save-json">下載存檔（.json）</button>
+          <label class="menu-file" role="menuitem">載入存檔…<input type="file" id="loadJson" accept=".json,application/json"></label>
+          <button type="button" role="menuitem" data-act="restart">重新開始</button>
+        </div>
+      </div>
+      <button class="icon-btn" id="btnTeacher" type="button" title="教師工具">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c3 2.5 9 2.5 12 0v-5"/></svg>
+        <span class="sr">教師工具</span>
+      </button>
+    </div>
+  </header>
+
+  <div class="frame-note" id="frameNote" hidden>你正在預覽模式開啟本網站：下載檔案可能被停用。上課時請使用下載到電腦或學校網站的版本。</div>
+
+  <main id="stage">
+    <!-- ============ 開始 ============ -->
+    <section class="step step-welcome" id="step-0" data-step="0">
+      <div class="welcome">
+        <div class="hero">
+          <canvas id="heroFloor" aria-hidden="true"></canvas>
+          <p class="hero-caption">每一塊花階磚，都由一個小圖案「重複」而成。</p>
+        </div>
+        <div class="welcome-main">
+          <p class="eyebrow">中二 ICT｜設計與計算思維｜兩個雙連堂</p>
+          <h1>為一位用家，設計一塊花階磚</h1>
+          <p class="lead">花階磚是香港舊樓常見的水泥花磚。你會訪問一位用家，找出用家的需要，用「演算法」重複圖案，最後把設計變成可以 3D 打印的杯墊或鎖匙扣。</p>
+          <form class="student-form" id="studentForm" autocomplete="off">
+            <label for="stuClass">班別<input id="stuClass" name="cls" maxlength="4" placeholder="2A" required></label>
+            <label for="stuNo">學號<input id="stuNo" name="no" inputmode="numeric" maxlength="2" placeholder="15" required></label>
+            <label for="stuName" class="grow">姓名（可不填）<input id="stuName" name="name" maxlength="12" placeholder="陳大文"></label>
+            <button type="submit" class="btn primary big" id="startBtn">開始任務</button>
+          </form>
+          <div class="resume" id="resumeBox" hidden>
+            <p id="resumeText"></p>
+            <div class="row">
+              <button type="button" class="btn primary" id="resumeBtn">繼續上次的設計</button>
+              <button type="button" class="btn ghost" id="freshBtn">重新開始</button>
+            </div>
+          </div>
+          <div class="journey" id="journey"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 1 認識用家 ============ -->
+    <section class="step" id="step-1" data-step="1" hidden>
+      <div class="step-head">
+        <p class="eyebrow">步驟 1｜同理（Empathise）</p>
+        <h2>認識你的用家</h2>
+        <p class="step-desc" id="s1desc">揀一位用家，然後逐條問題訪問。答案中有<span class="need-demo">底線</span>的地方就是線索：點一下，把「需要」放進收集箱。</p>
+      </div>
+      <div class="persona-grid" id="personaGrid"></div>
+      <div class="interview-layout" id="interviewLayout" hidden>
+        <div class="interview">
+          <div class="persona-bar" id="personaBar"></div>
+          <div class="questions" id="questionList" role="group" aria-label="訪問問題"></div>
+          <div class="chat" id="chatLog" aria-live="polite"></div>
+        </div>
+        <aside class="needbox" id="needBox" aria-label="需要收集箱">
+          <h3>需要收集箱</h3>
+          <p class="needbox-count" id="needCount"></p>
+          <ul class="need-list" id="needList"></ul>
+          <p class="muted small">最少收集 3 個需要。按 × 可移除。</p>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ============ 2 定義問題 ============ -->
+    <section class="step" id="step-2" data-step="2" hidden>
+      <div class="step-head">
+        <p class="eyebrow">步驟 2｜定義（Define）</p>
+        <h2>定義問題：你要解決甚麼？</h2>
+        <p class="step-desc">設計師不會「甚麼都做」。揀出最重要的 3 個需要，它們會成為你的設計準則，稍後用來測試作品。</p>
+      </div>
+      <div class="define-layout">
+        <div class="define-form">
+          <div class="field">
+            <p class="field-label">① 我要為 <strong id="defPersona">用家</strong> 設計一個……</p>
+            <div class="product-pick" id="productPick" role="radiogroup" aria-label="產品"></div>
+          </div>
+          <div class="field">
+            <p class="field-label">② 按重要次序，點選 3 個需要</p>
+            <div class="rank-pick" id="rankPick"></div>
+            <p class="muted small" id="rankNote"></p>
+          </div>
+          <div class="field">
+            <p class="field-label">③ 我的設計風格（揀 1–2 個）</p>
+            <div class="chips" id="stylePick"></div>
+          </div>
+        </div>
+        <div class="hmw" id="hmwCard" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <!-- ============ 3 花階磚偵探 ============ -->
+    <section class="step" id="step-3" data-step="3" hidden>
+      <div class="step-head">
+        <p class="eyebrow">步驟 3｜拆解・模式識別</p>
+        <h2>花階磚偵探</h2>
+        <p class="step-desc">先拆解，後設計。找出一塊磚最少要畫哪一部分，其餘都可以用「重複」完成。</p>
+      </div>
+      <div class="tabs" role="tablist" id="detTabs">
+        <button role="tab" type="button" data-tab="d1" aria-selected="true">任務一：紅花地磚</button>
+        <button role="tab" type="button" data-tab="d2" aria-selected="false">任務二：綠葉風車</button>
+        <button role="tab" type="button" data-tab="d3" aria-selected="false">任務三：拆解大問題</button>
+      </div>
+      <div class="det-panel" id="det-d1" data-task="1"></div>
+      <div class="det-panel" id="det-d2" data-task="2" hidden></div>
+      <div class="det-panel" id="det-d3" hidden>
+        <div class="tree" id="decompTree"></div>
+      </div>
+    </section>
+
+    <!-- ============ 4 演算法工作坊 ============ -->
+    <section class="step" id="step-4" data-step="4" hidden>
+      <div class="step-head">
+        <p class="eyebrow">步驟 4｜演算法（Algorithm）</p>
+        <h2>演算法工作坊</h2>
+        <p class="step-desc">用積木寫出「重複、旋轉、鏡像」的步驟，電腦就會幫你把一小塊圖案變成整塊花階磚。</p>
+      </div>
+      <div class="tabs" role="tablist" id="algoTabs">
+        <button role="tab" type="button" data-tab="tile" aria-selected="true">一塊磚：重複與鏡像</button>
+        <button role="tab" type="button" data-tab="floor" aria-selected="false">整個地板：巢狀迴圈與「如果」</button>
+      </div>
+      <div class="algo-panel" id="algo-tile">
+        <div class="challenge-bar" id="tileChallenges"></div>
+        <div class="algo-grid">
+          <div class="algo-program">
+            <div class="blocks" id="tileBlocks"></div>
+            <div class="algo-controls">
+              <button type="button" class="btn primary" id="runTile">▶ 執行</button>
+              <button type="button" class="btn" id="stepTile">一步一步</button>
+              <button type="button" class="btn ghost" id="resetTile">重設</button>
+              <label class="switch"><input type="checkbox" id="fastTile"> 快速</label>
+            </div>
+            <details class="code-peek">
+              <summary>看看 JavaScript 版本</summary>
+              <pre id="tileCode"></pre>
+            </details>
+          </div>
+          <div class="algo-view">
+            <div class="algo-canvas-box">
+              <canvas id="algoCanvas" width="480" height="480"></canvas>
+              <div class="vars" id="tileVars"></div>
+            </div>
+            <div class="target-box">
+              <p class="small muted">目標</p>
+              <canvas id="algoTarget" width="200" height="200"></canvas>
+              <p class="algo-msg" id="tileMsg" aria-live="polite"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="algo-panel" id="algo-floor" hidden>
+        <div class="challenge-bar" id="floorChallenges"></div>
+        <div class="algo-grid">
+          <div class="algo-program">
+            <div class="field inline">
+              <label for="floorTile">用哪一塊磚：</label>
+              <select id="floorTile"></select>
+              <label for="floorRule">規則：</label>
+              <select id="floorRule"></select>
+            </div>
+            <div class="blocks" id="floorBlocks"></div>
+            <div class="algo-controls">
+              <button type="button" class="btn primary" id="runFloor">▶ 執行</button>
+              <button type="button" class="btn ghost" id="resetFloor">重設</button>
+              <label class="switch"><input type="checkbox" id="fastFloor"> 快速</label>
+            </div>
+            <p class="algo-think" id="floorThink"></p>
+          </div>
+          <div class="algo-view">
+            <div class="algo-canvas-box">
+              <canvas id="floorCanvas" width="480" height="480"></canvas>
+              <div class="vars" id="floorVars"></div>
+            </div>
+            <div class="target-box">
+              <p class="small muted">目標</p>
+              <canvas id="floorTarget" width="200" height="200"></canvas>
+              <p class="algo-msg" id="floorMsg" aria-live="polite"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 5 設計 ============ -->
+    <section class="step step-full" id="step-5" data-step="5" hidden>
+      <div class="editor">
+        <aside class="rail rail-left" aria-label="工具">
+          <section class="panel">
+            <h3>形狀 <span class="muted small">點一下加入</span></h3>
+            <div class="shape-grid" id="shapeGrid"></div>
+          </section>
+          <section class="panel">
+            <h3>背景顏色</h3>
+            <div class="swatches" id="bgSwatches"></div>
+          </section>
+          <section class="panel">
+            <h3>對稱方法（演算法）</h3>
+            <div class="sym-list" id="symList"></div>
+          </section>
+          <section class="panel">
+            <h3>範例與靈感</h3>
+            <div class="preset-row" id="presetRow"></div>
+            <button type="button" class="btn full" id="btnRandom">隨機靈感</button>
+          </section>
+        </aside>
+        <div class="canvas-stage">
+          <div class="canvas-toolbar" role="toolbar" aria-label="編輯">
+            <button type="button" class="icon-btn" id="btnUndo" title="復原（Ctrl+Z）"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg><span class="sr">復原</span></button>
+            <button type="button" class="icon-btn" id="btnRedo" title="重做（Ctrl+Y）"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 14l5-5-5-5"/><path d="M20 9H10a6 6 0 0 0 0 12h3"/></svg><span class="sr">重做</span></button>
+            <span class="sep"></span>
+            <label class="switch"><input type="checkbox" id="optSnap" checked> 對齊</label>
+            <label class="switch"><input type="checkbox" id="optGuide" checked> 顯示基本區域</label>
+            <span class="sep"></span>
+            <button type="button" class="btn ghost small" id="btnClear">清除全部</button>
+          </div>
+          <div class="canvas-box" id="editorBox">
+            <canvas id="editorCanvas" tabindex="0" aria-label="花階磚畫布：點選形狀可拖曳，方向鍵微調"></canvas>
+          </div>
+          <p class="canvas-status" id="editorStatus" aria-live="polite"></p>
+        </div>
+        <aside class="rail rail-right" aria-label="設定">
+          <section class="panel" id="inspector"></section>
+          <section class="panel">
+            <h3>地板預覽</h3>
+            <canvas id="miniFloor" width="240" height="240" aria-label="地板預覽"></canvas>
+            <label class="field inline small" for="edFloorRule">拼法 <select id="edFloorRule"></select></label>
+          </section>
+          <section class="panel" id="criteriaPanel"></section>
+          <section class="panel" id="feedbackPanel" hidden></section>
+          <section class="panel">
+            <h3>版本</h3>
+            <div class="versions" id="versionList"></div>
+            <button type="button" class="btn primary full" id="btnSaveVersion">儲存為 v1</button>
+          </section>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ============ 6 3D 原型 ============ -->
+    <section class="step step-full" id="step-6" data-step="6" hidden>
+      <div class="print-layout">
+        <div class="viewer-box">
+          <div class="viewer-host" id="viewerHost"></div>
+          <div class="viewer-overlay">
+            <div class="seg" role="radiogroup" aria-label="預覽顏色" id="modeSeg">
+              <button type="button" data-mode="real" aria-pressed="true">真實顏色</button>
+              <button type="button" data-mode="mono" aria-pressed="false">單色打印</button>
+              <button type="button" data-mode="dual" aria-pressed="false">雙色打印</button>
+            </div>
+            <label class="switch on-dark"><input type="checkbox" id="autoRotate" checked> 自動旋轉</label>
+          </div>
+          <p class="viewer-busy" id="viewerBusy" hidden>生成 3D 模型中……</p>
+          <p class="viewer-error" id="viewerError" hidden>未能載入 3D 程式庫（three.js）。請檢查網絡，或確認 lib 資料夾在網站旁邊。</p>
+        </div>
+        <aside class="print-panel">
+          <section class="panel">
+            <h3>產品款式</h3>
+            <div class="product-pick compact" id="printProduct" role="radiogroup" aria-label="產品"></div>
+            <label class="switch" id="roundedWrap"><input type="checkbox" id="optRounded"> 圓角（較安全）</label>
+          </section>
+          <section class="panel">
+            <h3>顏色 → 高度</h3>
+            <p class="small muted">3D 打印機看不懂顏色，所以我們用「高度」代表顏色。這就是<strong>抽象化</strong>：只保留最重要的資料。</p>
+            <div class="height-table" id="heightTable"></div>
+            <p class="small warn-text" id="heightHint" hidden></p>
+          </section>
+          <section class="panel" id="filamentPanel" hidden>
+            <h3>打印用的顏色</h3>
+            <div class="filaments" id="filaments"></div>
+          </section>
+          <section class="panel">
+            <h3>打印資料</h3>
+            <dl class="stats" id="printStats"></dl>
+            <ul class="warnings" id="printWarnings"></ul>
+          </section>
+          <section class="panel">
+            <button type="button" class="btn primary full" id="btnSTL">下載 3D 模型（STL）</button>
+            <button type="button" class="btn full" id="btnZip">下載分色模型（多色打印機，ZIP）</button>
+            <p class="small muted" id="dualTip"></p>
+          </section>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ============ 7 測試與改良 ============ -->
+    <section class="step" id="step-7" data-step="7" hidden>
+      <div class="step-head">
+        <p class="eyebrow">步驟 7｜測試（Test）與改良</p>
+        <h2>請同學扮演你的用家</h2>
+        <p class="step-desc">請鄰座同學坐過來，按「開始測試」。測試員會代入用家的身份，用你的 3 個設計準則評分，再給你意見。</p>
+      </div>
+      <div class="test-layout" id="testDesigner"></div>
+      <div class="tester" id="testerView" hidden></div>
+    </section>
+
+    <!-- ============ 8 作品卡 ============ -->
+    <section class="step" id="step-8" data-step="8" hidden>
+      <div class="step-head">
+        <p class="eyebrow">步驟 8｜分享與反思</p>
+        <h2>作品卡</h2>
+        <p class="step-desc">完成反思和創作聲明，下載作品卡、3D 模型及存檔，然後提交給老師。</p>
+      </div>
+      <div class="showcase">
+        <div class="card-preview"><canvas id="cardCanvas" width="1240" height="1754" aria-label="作品卡預覽"></canvas></div>
+        <aside class="showcase-side">
+          <section class="panel">
+            <h3>我學到了（揀最多 3 項）</h3>
+            <div class="chips" id="learnedPick"></div>
+          </section>
+          <section class="panel">
+            <h3>我最滿意的地方</h3>
+            <div class="chips" id="proudPick"></div>
+          </section>
+          <section class="panel">
+            <h3>創作聲明（誠信）</h3>
+            <div class="checks" id="declarePick"></div>
+          </section>
+          <section class="panel">
+            <h3>下載及提交</h3>
+            <div class="download-grid">
+              <button type="button" class="btn primary" id="dlCard">作品卡（PNG）</button>
+              <button type="button" class="btn" id="dlTile">花階磚圖片（PNG）</button>
+              <button type="button" class="btn" id="dlStl">3D 模型（STL）</button>
+              <button type="button" class="btn" id="dlJson">存檔（JSON）</button>
+            </div>
+            <p class="small muted">提交：作品卡 PNG + 存檔 JSON（老師會用存檔製作全班作品牆）。</p>
+          </section>
+          <section class="panel">
+            <h3>徽章</h3>
+            <div class="badges" id="badgeShelf"></div>
+          </section>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer class="stepnav">
+    <button type="button" class="btn ghost" id="prevBtn">上一步</button>
+    <p class="step-hint" id="stepHint" aria-live="polite"></p>
+    <button type="button" class="btn primary" id="nextBtn">下一步</button>
+  </footer>
+</div>
+
+<!-- 教師工具 -->
+<div class="teacher" id="teacher" role="dialog" aria-modal="true" aria-labelledby="teacherTitle" hidden>
+  <div class="teacher-panel">
+    <header class="teacher-head">
+      <h2 id="teacherTitle">教師工具</h2>
+      <div class="tabs" role="tablist" id="teacherTabs">
+        <button role="tab" type="button" data-tab="lesson" aria-selected="true">課堂流程</button>
+        <button role="tab" type="button" data-tab="wall" aria-selected="false">全班作品牆</button>
+        <button role="tab" type="button" data-tab="tips" aria-selected="false">答案與提示</button>
+      </div>
+      <button type="button" class="icon-btn" id="teacherClose" title="關閉"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span class="sr">關閉</span></button>
+    </header>
+    <div class="teacher-body">
+      <div class="t-panel" id="t-lesson"></div>
+      <div class="t-panel" id="t-wall" hidden></div>
+      <div class="t-panel" id="t-tips" hidden></div>
+    </div>
+  </div>
+</div>
+
+<!-- 對話框（取代 confirm） -->
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" hidden>
+  <div class="modal-card">
+    <h3 id="modalTitle"></h3>
+    <div id="modalBody"></div>
+    <div class="row end">
+      <button type="button" class="btn ghost" id="modalCancel">取消</button>
+      <button type="button" class="btn primary" id="modalOk">確定</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<canvas class="confetti" id="confetti" aria-hidden="true"></canvas>
+
+<script src="lib/three.min.js"></script>
+<script>window.THREE || document.write('<script src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js"><\/script>');</script>
+<script src="js/content.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/mesh.js"></script>
+<script src="js/view3d.js"></script>
+<script src="js/app.js"></script>
+<script src="js/steps-learn.js"></script>
+<script src="js/steps-make.js"></script>
+<script src="js/teacher.js"></script>
+<script>App.boot();</script>
+</body>
+</html>
