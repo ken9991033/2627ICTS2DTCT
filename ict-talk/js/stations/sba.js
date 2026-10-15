@@ -37,7 +37,7 @@ const VIEW = [
   { c: 3360, on: [3], nodes: 3, cur: [2] },
   { c: 4540, on: [4, 5], nodes: 5, cur: [3, 4] },
 ];
-const OVERVIEW = { c: 2610, s: 0.3 };
+const OVERVIEW = { c: 3370, s: 0.3 };
 
 const CODE = `def borrow(book_id):
     book = books[book_id]
@@ -90,7 +90,7 @@ export default {
       </div>
 
       <svg class="sba-line" width="1920" height="1080" viewBox="0 0 1920 1080" aria-hidden="true">
-        <defs><linearGradient id="sbaLineG" x1="0" x2="1"><stop offset="0" stop-color="#a3e635"/><stop offset="1" stop-color="#22d3ee"/></linearGradient></defs>
+        <defs><linearGradient id="sbaLineG" gradientUnits="userSpaceOnUse" x1="${NODE_X[0]}" x2="${NODE_X[4]}" y1="0" y2="0"><stop offset="0" stop-color="#a3e635"/><stop offset="1" stop-color="#22d3ee"/></linearGradient></defs>
         <path class="base" d="M${NODE_X[0]} ${LINE_Y} H${NODE_X[4]}"/>
         <path class="prog" d="M${NODE_X[0]} ${LINE_Y} H${NODE_X[4]}"/>
       </svg>
@@ -222,7 +222,7 @@ export default {
       /* 站內鏡頭 */
       .st-sba .sba-cam { position:absolute; left:0; top:0; width:1920px; height:1080px; transform-origin:960px ${CAM_OY}px; }
       .st-sba .sba-track { position:absolute; left:0; top:${TRACK_TOP}px; width:5300px; height:${CARD_H}px; }
-      .st-sba .card { position:absolute; top:0; height:${CARD_H}px; padding:30px 40px; opacity:.22; }
+      .st-sba .card { position:absolute; top:0; height:${CARD_H}px; padding:30px 40px; opacity:.14; }
       .st-sba .card.c0 { top:40px; height:470px; display:flex; align-items:center; gap:56px; padding:40px 64px; opacity:1; }
       .st-sba .brief-ic { flex:0 0 200px; height:200px; border-radius:50%; display:grid; place-items:center; color:var(--accent); background:radial-gradient(circle, rgba(163,230,53,.22), rgba(163,230,53,.04) 70%); border:2px solid rgba(163,230,53,.5); box-shadow:0 0 60px rgba(163,230,53,.25); }
       .st-sba .brief-ic .ic { width:100px; height:100px; }
@@ -294,7 +294,7 @@ export default {
       .st-sba .blocks { display:flex; gap:12px; margin-top:22px; }
       .st-sba .blocks i { flex:1; height:52px; border-radius:12px; border:2px solid var(--line-strong); background:rgba(255,255,255,.03); display:grid; place-items:center; font:800 24px var(--mono); font-style:normal; color:#0a1204; }
       .st-sba .blocks i.on { background:var(--accent); border-color:var(--accent); box-shadow:0 0 30px rgba(163,230,53,.6); }
-      .st-sba .sba-banner { position:absolute; left:260px; width:1400px; top:850px; height:120px; display:grid; place-items:center; font-size:44px; font-weight:900; opacity:0; border-color:rgba(163,230,53,.45); }
+      .st-sba .sba-banner { position:absolute; left:260px; width:1400px; top:850px; height:120px; display:flex; justify-content:center; align-items:center; white-space:nowrap; font-size:44px; font-weight:900; opacity:0; border-color:rgba(163,230,53,.45); }
     `;
     root.appendChild(css);
 
@@ -410,7 +410,7 @@ export default {
     }
     S.cards.forEach((c, i) => {
       const on = view.on.includes(i);
-      put(tl, c, { opacity: on ? 1 : 0.22, duration: 0.8 }, on ? 0.6 : 0);
+      put(tl, c, { opacity: on ? 1 : 0.14, duration: 0.8 }, on ? 0.6 : 0);
       if (tl) tl.call(() => c.classList.toggle('glow-edge', on), null, on ? 0.9 : 0);
       else c.classList.toggle('glow-edge', on);
     });
