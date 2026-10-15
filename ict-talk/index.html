@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh-Hant-HK">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>深入科技｜ICT 選科講座</title>
+<meta name="description" content="中三升中四選科講座：以「深入科技」旅程介紹 HKDSE 資訊及通訊科技（ICT）。">
+<link rel="stylesheet" href="vendor/fonts/noto.css">
+<link rel="stylesheet" href="vendor/fonts/mono.css">
+<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+<div id="viewport">
+  <canvas id="bg" aria-hidden="true"></canvas>
+  <div id="stage">
+    <div id="world"></div>
+  </div>
+  <div id="flash" aria-hidden="true"></div>
+
+  <!-- 深度計 -->
+  <div id="hud" class="hud">
+    <div class="meter" id="meter">
+      <div class="meter-title">觀察尺度</div>
+      <div class="meter-track"><div class="meter-ticks" id="meterTicks"></div><div class="meter-marker" id="meterMarker"></div></div>
+      <div class="meter-readout"><span id="meterScale">—</span><small id="meterLayer"></small></div>
+    </div>
+    <div class="crumb" id="crumb"><span class="crumb-mod" id="crumbMod"></span><span id="crumbTitle"></span></div>
+    <div class="progress" id="progress"></div>
+  </div>
+
+  <div id="controls" class="controls">
+    <button type="button" data-act="prev" title="上一步（←）" aria-label="上一步">‹</button>
+    <button type="button" data-act="overview" title="全景地圖（O）" aria-label="全景地圖">◎</button>
+    <button type="button" data-act="next" title="下一步（→／空白鍵）" aria-label="下一步">›</button>
+    <button type="button" data-act="sound" title="音效開關（M）" aria-label="音效開關" id="btnSound">♪</button>
+    <button type="button" data-act="notes" title="講者備註視窗（N）" aria-label="講者備註">✎</button>
+    <button type="button" data-act="fullscreen" title="全螢幕（F）" aria-label="全螢幕">⛶</button>
+    <button type="button" data-act="help" title="快捷鍵（?）" aria-label="快捷鍵">?</button>
+  </div>
+
+  <div id="overview" class="overview" hidden>
+    <div class="overview-head">
+      <div class="kicker">全景地圖</div>
+      <div class="overview-title">深入科技旅程</div>
+      <div class="overview-hint">點擊任何一站直接前往　·　按 O 或 Esc 返回</div>
+    </div>
+    <div class="overview-map" id="overviewMap"></div>
+  </div>
+
+  <div id="help" class="help" hidden>
+    <div class="help-card">
+      <div class="kicker">講者快捷鍵</div>
+      <dl>
+        <dt>→ ／ 空白鍵 ／ PageDown</dt><dd>下一步</dd>
+        <dt>← ／ PageUp</dt><dd>上一步</dd>
+        <dt>O</dt><dd>全景地圖</dd>
+        <dt>1–9、0</dt><dd>跳到第 1–10 站（Shift + 數字：第 11–20 站）</dd>
+        <dt>Home ／ End</dt><dd>第一站 ／ 最後一站</dd>
+        <dt>F</dt><dd>全螢幕</dd>
+        <dt>N</dt><dd>開啟講者備註視窗（可拖到另一個螢幕）</dd>
+        <dt>M</dt><dd>音效開關</dd>
+        <dt>B ／ .</dt><dd>黑屏</dd>
+        <dt>P</dt><dd>效能模式（電腦較慢時使用）</dd>
+        <dt>Esc</dt><dd>離開輸入框 ／ 關閉視窗</dd>
+      </dl>
+      <div class="help-foot">在程式編輯器內打字時，方向鍵不會轉頁；按 Esc 離開編輯器即可。</div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" aria-live="polite"></div>
+  <div id="blackout" hidden></div>
+</div>
+
+<script src="vendor/gsap/gsap.min.js"></script>
+<script src="vendor/gsap/CustomEase.min.js"></script>
+<script src="vendor/gsap/DrawSVGPlugin.min.js"></script>
+<script src="vendor/gsap/Flip.min.js"></script>
+<script src="vendor/gsap/MorphSVGPlugin.min.js"></script>
+<script src="vendor/gsap/MotionPathPlugin.min.js"></script>
+<script src="vendor/gsap/Physics2DPlugin.min.js"></script>
+<script src="vendor/gsap/ScrambleTextPlugin.min.js"></script>
+<script src="vendor/gsap/SplitText.min.js"></script>
+<script src="vendor/gsap/TextPlugin.min.js"></script>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

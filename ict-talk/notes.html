@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-Hant-HK">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>講者備註｜ICT 選科講座</title>
+<link rel="stylesheet" href="vendor/fonts/noto.css">
+<link rel="stylesheet" href="vendor/fonts/mono.css">
+<style>
+  :root { --bg:#070914; --ink:#eef1ff; --ink2:#b4bce0; --ink3:#7c86b2; --line:rgba(160,180,255,.18); --acc:#22d3ee; --warn:#fbbf24; --hot:#ff3d7f; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:'Noto Sans TC Variable','Microsoft JhengHei',sans-serif; }
+  header { display:flex; align-items:center; gap:20px; padding:16px 24px; border-bottom:1px solid var(--line); }
+  .clock { font:700 34px 'JetBrains Mono',monospace; }
+  .clock small { font-size:14px; color:var(--ink3); margin-left:8px; }
+  .pace { font-size:15px; padding:4px 12px; border-radius:999px; border:1px solid var(--line); }
+  .pace.ok { color:#34d399; border-color:#34d39966; } .pace.late { color:var(--hot); border-color:#ff3d7f66; } .pace.early { color:var(--warn); border-color:#fbbf2466; }
+  .btns { margin-left:auto; display:flex; gap:8px; }
+  button { font:inherit; font-size:16px; padding:10px 18px; border-radius:10px; border:1px solid var(--line); background:#10142c; color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--acc); }
+  main { padding:20px 24px; display:grid; grid-template-columns:1fr 280px; gap:24px; }
+  .now .n { font:700 14px 'JetBrains Mono',monospace; color:var(--acc); }
+  .now h1 { margin:6px 0 4px; font-size:30px; }
+  .step { font-size:15px; color:var(--ink3); }
+  .notes { margin-top:16px; font-size:22px; line-height:1.75; white-space:pre-wrap; }
+  .next { margin-top:20px; padding-top:14px; border-top:1px dashed var(--line); color:var(--ink3); font-size:16px; }
+  .next b { color:var(--ink2); }
+  ol { margin:0; padding:0; list-style:none; font-size:14px; }
+  ol li { display:flex; justify-content:space-between; gap:8px; padding:5px 8px; border-radius:6px; color:var(--ink3); cursor:pointer; }
+  ol li.on { background:#16204a; color:var(--ink); }
+  ol li:hover { color:var(--ink); }
+  .wait { padding:40px; color:var(--ink3); font-size:18px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="clock" id="clock">00:00<small>／ 20:00</small></div>
+  <div class="pace" id="pace">—</div>
+  <div class="btns"><button id="prev">← 上一步</button><button id="next">下一步 →</button></div>
+</header>
+<main>
+  <section class="now">
+    <div class="wait" id="wait">等待簡報視窗……（請在簡報頁按 N 開啟本視窗）</div>
+    <div id="body" hidden>
+      <div class="n" id="num"></div>
+      <h1 id="title"></h1>
+      <div class="step" id="step"></div>
+      <div class="notes" id="notes"></div>
+      <div class="next">下一站：<b id="nextTitle"></b></div>
+    </div>
+  </section>
+  <aside><ol id="plan"></ol></aside>
+</main>
+<script>
+  const ch = new BroadcastChannel('ict-talk');
+  let s = null;
+  const $ = id => document.getElementById(id);
+  const fmt = sec => `${String(Math.floor(sec / 60)).padStart(2, '0')}:${String(Math.floor(sec % 60)).padStart(2, '0')}`;
+  ch.onmessage = e => {
+    if (e.data.type !== 'state') return;
+    s = e.data;
+    $('wait').hidden = true; $('body').hidden = false;
+    $('num').textContent = `第 ${s.index + 1} ／ ${s.total} 站${s.module ? '　·　單元 ' + s.module : ''}　·　建議 ${s.minutes} 分鐘`;
+    $('title').textContent = s.title;
+    $('step').textContent = s.steps ? `步驟 ${s.step} ／ ${s.steps}` : '';
+    $('notes').textContent = s.notes || '（此站沒有備註）';
+    $('nextTitle').textContent = s.next;
+    $('plan').innerHTML = s.plan.map((p, i) => `<li class="${i === s.index ? 'on' : ''}" data-i="${i}"><span>${i + 1}. ${p.title}</span><span>${p.minutes}′</span></li>`).join('');
+  };
+  $('plan').onclick = e => { const li = e.target.closest('li'); if (li) ch.postMessage({ type: 'cmd', cmd: 'goto', index: Number(li.dataset.i) }); };
+  $('next').onclick = () => ch.postMessage({ type: 'cmd', cmd: 'next' });
+  $('prev').onclick = () => ch.postMessage({ type: 'cmd', cmd: 'prev' });
+  addEventListener('keydown', e => {
+    if (['ArrowRight', ' ', 'PageDown'].includes(e.key)) { e.preventDefault(); ch.postMessage({ type: 'cmd', cmd: 'next' }); }
+    if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); ch.postMessage({ type: 'cmd', cmd: 'prev' }); }
+  });
+  ch.postMessage({ type: 'cmd', cmd: 'hello' });
+  setInterval(() => {
+    if (!s) return;
+    const el = (Date.now() - s.start) / 1000;
+    $('clock').innerHTML = `${fmt(el)}<small>／ 20:00</small>`;
+    const planned = s.plan.slice(0, s.index).reduce((a, p) => a + p.minutes, 0) * 60;
+    const diff = el - planned;
+    const pace = $('pace');
+    if (diff > 90) { pace.className = 'pace late'; pace.textContent = `比計劃慢 ${Math.round(diff / 60)} 分鐘`; }
+    else if (diff < -90) { pace.className = 'pace early'; pace.textContent = `比計劃快 ${Math.round(-diff / 60)} 分鐘`; }
+    else { pace.className = 'pace ok'; pace.textContent = '進度剛好'; }
+  }, 1000);
+</script>
+</body>
+</html>
