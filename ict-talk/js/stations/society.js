@@ -15,14 +15,14 @@ const LEVELS = [
   { name: '極強', color: '#34d399' },
 ];
 const ISSUES = [
-  { k: 'priv', title: '私隱', color: '#22d3ee', x: 230, y: 285, icon: '<path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"/><path d="M14.084 14.158a3 3 0 0 1-4.242-4.242"/><path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"/><path d="m2 2 20 20"/>', text: '分享相片前想一想：會否洩露你的位置、學校及日常行蹤？' },
-  { k: 'ip', title: '版權與知識產權', color: '#fbbf24', x: 230, y: 610, icon: '<circle cx="12" cy="12" r="10"/><path d="M14.83 14.83a4 4 0 1 1 0-5.66"/>', text: '網上找到的圖片、音樂和程式，不等於可以隨意使用。' },
-  { k: 'ai', title: '人工智能與深偽', color: '#a78bfa', x: 1370, y: 285, icon: '<path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01"/><path d="M15 9h.01"/>', text: 'AI 能生成以假亂真的影片及聲音，要學會查證來源。' },
-  { k: 'care', title: '網絡欺凌與健康使用', color: '#ff7ab2', x: 1370, y: 610, icon: '<path d="M19.414 14.414C21 12.828 22 11.5 22 9.5a5.5 5.5 0 0 0-9.591-3.676.6.6 0 0 1-.818.001A5.5 5.5 0 0 0 2 9.5c0 2.3 1.5 4 3 5.5l5.535 5.362a2 2 0 0 0 2.879.052 2.12 2.12 0 0 0-.004-3 2.124 2.124 0 1 0 3-3 2.124 2.124 0 0 0 3.004 0 2 2 0 0 0 0-2.828l-1.881-1.882a2.41 2.41 0 0 0-3.409 0l-1.71 1.71a2 2 0 0 1-2.828 0 2 2 0 0 1 0-2.828l2.823-2.762"/>', text: '尊重他人，不轉發傷害別人的內容；善用科技而不沉迷。' },
+  { k: 'priv', title: '私隱', color: '#22d3ee', x: 230, y: 285, icon: '<path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"/><path d="M14.084 14.158a3 3 0 0 1-4.242-4.242"/><path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"/><path d="m2 2 20 20"/>', text: '分享相片前，先想一想：<br>會否洩露位置、學校及行蹤？' },
+  { k: 'ip', title: '版權與知識產權', color: '#fbbf24', x: 230, y: 610, icon: '<circle cx="12" cy="12" r="10"/><path d="M14.83 14.83a4 4 0 1 1 0-5.66"/>', text: '網上找到的圖片、音樂和程式，<br>不等於可以隨意使用。' },
+  { k: 'ai', title: '人工智能與深偽', color: '#a78bfa', x: 1370, y: 285, icon: '<path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01"/><path d="M15 9h.01"/>', text: 'AI 可生成以假亂真的影像，<br>分享前要先查證來源。' },
+  { k: 'care', title: '網絡欺凌與健康使用', color: '#ff7ab2', x: 1370, y: 610, icon: '<path d="M19.414 14.414C21 12.828 22 11.5 22 9.5a5.5 5.5 0 0 0-9.591-3.676.6.6 0 0 1-.818.001A5.5 5.5 0 0 0 2 9.5c0 2.3 1.5 4 3 5.5l5.535 5.362a2 2 0 0 0 2.879.052 2.12 2.12 0 0 0-.004-3 2.124 2.124 0 1 0 3-3 2.124 2.124 0 0 0 3.004 0 2 2 0 0 0 0-2.828l-1.881-1.882a2.41 2.41 0 0 0-3.409 0l-1.71 1.71a2 2 0 0 1-2.828 0 2 2 0 0 1 0-2.828l2.823-2.762"/>', text: '尊重他人，不轉發傷人的內容；<br>善用科技，而不沉迷。' },
 ];
 const CAPTIONS = {
   idle: '每一個帳戶背後，都連繫著身邊的人。',
-  red: '帳戶被盜用：騙徒冒認你，向朋友發出詐騙訊息。',
+  red: '帳戶被盜用：騙徒冒認你，<br>向你的朋友發出詐騙訊息。',
   green: '強密碼不只保護自己，也保護身邊的人。',
 };
 const LOCK_CLOSED = 'M7 11V7a5 5 0 0 1 10 0v4';
@@ -169,7 +169,7 @@ export default {
 
   build(root, ctx) {
     const nodesSVG = NODES.map((p, i) => i === 0
-      ? `<g class="nd nd-you" data-i="0" transform="translate(${p.x},${p.y})"><circle class="nd-c" r="36"/><text class="nd-t" y="10">你</text></g>`
+      ? `<g class="nd nd-you" data-i="0" transform="translate(${p.x},${p.y})"><circle class="nd-halo" r="62"/><circle class="nd-c" r="36"/><text class="nd-t" y="10">你</text></g>`
       : `<g class="nd" data-i="${i}" transform="translate(${p.x},${p.y})"><circle class="nd-c" r="26"/><g class="nd-g"><circle cx="0" cy="-6" r="6.5"/><path d="M-11,13 a11,9 0 0 1 22,0"/></g></g>`).join('');
     const edgesSVG = EDGES.map(([a, b]) => `<line class="ed" data-e="${a}-${b}" x1="${NODES[a].x}" y1="${NODES[a].y}" x2="${NODES[b].x}" y2="${NODES[b].y}"/>`).join('');
     const spokesSVG = NODES.map((p, i) => {
@@ -183,6 +183,7 @@ export default {
       <div class="soc-cam">
         <svg class="soc-net" width="1920" height="1080" viewBox="0 0 1920 1080" aria-hidden="true">
           <defs>
+            <radialGradient id="socYou"><stop offset=".45" stop-color="#34d399" stop-opacity=".55"/><stop offset="1" stop-color="#34d399" stop-opacity="0"/></radialGradient>
             <radialGradient id="socAura"><stop offset="0" stop-color="#34d399" stop-opacity=".22"/><stop offset=".55" stop-color="#60a5fa" stop-opacity=".06"/><stop offset="1" stop-color="#60a5fa" stop-opacity="0"/></radialGradient>
           </defs>
           <ellipse class="soc-aura" cx="${NET.cx}" cy="${NET.cy}" rx="380" ry="350" fill="url(#socAura)"/>
@@ -195,7 +196,7 @@ export default {
           <g class="nodes">${nodesSVG}</g>
         </svg>
         <div class="soc-globe soc-origin"><canvas width="440" height="440"></canvas></div>
-        <div class="soc-caption"><span class="cap-dot"></span><span class="cap-t">${CAPTIONS.idle}</span></div>
+        <div class="soc-caption"><span class="cap-dot"></span><span class="cap-t" data-state="idle">${CAPTIONS.idle}</span></div>
 
         <div class="soc-panel panel">
           <div class="sp-top"><span class="sp-title">密碼強度測試器</span><span class="chip">假設每秒嘗試 100 億次</span></div>
@@ -219,6 +220,7 @@ export default {
               <div class="lbl">模擬攻擊 1 小時</div>
               <svg class="sp-ring" viewBox="0 0 240 240">
                 <circle class="trk" cx="120" cy="120" r="104"/>
+                <circle class="arc-glow" cx="120" cy="120" r="104" transform="rotate(-90 120 120)"/>
                 <circle class="arc" cx="120" cy="120" r="104" transform="rotate(-90 120 120)"/>
                 <g class="lock" transform="translate(76.8 78) scale(3.6)">
                   <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
@@ -260,7 +262,6 @@ export default {
       .st-society .grad-e { background: linear-gradient(100deg, #34d399, #60a5fa 70%); -webkit-background-clip: text; background-clip: text; color: transparent; }
       .st-society .soc-lines { position: absolute; left: 0; top: 0; z-index: 1; pointer-events: none; overflow: visible; }
       .st-society .soc-lines path { fill: none; stroke-width: 3; stroke-linecap: round; opacity: .55; }
-      .st-society .soc-lines circle { filter: drop-shadow(0 0 8px currentColor); }
       .st-society .soc-cam { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; z-index: 2; transform-origin: 0 0; }
       .st-society .soc-net { position: absolute; left: 0; top: 0; overflow: visible; pointer-events: none; }
       .st-society .soc-orbit { fill: none; stroke: rgba(52, 211, 153, .18); stroke-width: 2; stroke-dasharray: 3 9; }
@@ -269,12 +270,13 @@ export default {
       .st-society .ed.red { stroke: rgba(255, 61, 127, .75); }
       .st-society .ed.green { stroke: rgba(52, 211, 153, .5); }
       .st-society .soc-wave { fill: none; stroke: #34d399; stroke-width: 6; opacity: 0; }
-      .st-society .packets circle { fill: #7dd3fc; filter: drop-shadow(0 0 6px #7dd3fc); }
-      .st-society .pulses circle { fill: #ff3d7f; filter: drop-shadow(0 0 10px #ff3d7f); }
+      .st-society .packets circle { fill: #a5f3fc; stroke: rgba(125, 211, 252, .35); stroke-width: 6; }
+      .st-society .pulses circle { fill: #ff8fb1; stroke: rgba(255, 61, 127, .45); stroke-width: 10; }
       .st-society .nd-c { fill: #0c1733; stroke: #7dd3fc; stroke-width: 3; }
       .st-society .nd-g { fill: none; stroke: #cfe3ff; stroke-width: 2.6; stroke-linecap: round; }
       .st-society .nd-g circle { fill: #cfe3ff; stroke: none; }
-      .st-society .nd-you .nd-c { stroke: #34d399; stroke-width: 4; fill: #08261e; filter: drop-shadow(0 0 14px rgba(52, 211, 153, .7)); }
+      .st-society .nd-you .nd-c { stroke: #34d399; stroke-width: 4; fill: #08261e; }
+      .st-society .nd-halo { fill: url(#socYou); }
       .st-society .nd-t { font: 900 30px var(--font); fill: #eafff6; text-anchor: middle; }
       .st-society .soc-globe { position: absolute; left: ${NET.cx - 110}px; top: ${NET.cy - 110}px; width: 220px; height: 220px; border-radius: 50%; box-shadow: 0 0 70px rgba(52, 211, 153, .35), 0 0 140px rgba(96, 165, 250, .25); }
       .st-society .soc-globe canvas { width: 220px; height: 220px; display: block; }
@@ -311,7 +313,8 @@ export default {
       .st-society .sp-right .lbl { color: var(--ink-2); }
       .st-society .sp-ring { width: 236px; height: 236px; display: block; margin: 8px auto 0; overflow: visible; }
       .st-society .sp-ring .trk { fill: rgba(5, 8, 22, .6); stroke: rgba(255, 255, 255, .08); stroke-width: 16; }
-      .st-society .sp-ring .arc { fill: none; stroke: #ff3d7f; stroke-width: 16; stroke-linecap: round; filter: drop-shadow(0 0 10px currentColor); }
+      .st-society .sp-ring .arc { fill: none; stroke: #ff3d7f; stroke-width: 16; stroke-linecap: round; }
+      .st-society .sp-ring .arc-glow { fill: none; stroke: #ff3d7f; stroke-width: 34; stroke-linecap: round; opacity: .22; }
       .st-society .sp-ring .lock { fill: none; stroke: #b4bce0; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
       .st-society .sp-ring .lock .hole { fill: #b4bce0; stroke: none; }
       .st-society .sp-status { margin-top: 10px; font-size: 30px; font-weight: 800; color: var(--ink-3); white-space: nowrap; }
@@ -344,7 +347,7 @@ export default {
       combo: root.querySelector('.sp-combo .val'),
       timeVal: root.querySelector('.sp-time .val'),
       timeSub: root.querySelector('.sp-time .sub'),
-      arc: root.querySelector('.sp-ring .arc'),
+      arc: root.querySelectorAll('.sp-ring .arc, .sp-ring .arc-glow'),
       lock: root.querySelector('.sp-ring .lock'),
       shackle: root.querySelector('.sp-ring .shackle'),
       status: root.querySelector('.sp-status'),
@@ -554,7 +557,7 @@ export default {
     // 攻擊進度環
     const color = !a.len ? '#7c86b2' : a.cracked ? '#ff3d7f' : a.level >= 4 ? '#34d399' : '#fbbf24';
     const pct = a.cracked ? 100 : Math.max(0, a.frac * 100);
-    gsap.to(S.arc, { drawSVG: `0% ${pct}%`, stroke: color, color, duration: instant ? 0 : 0.5, ease: 'power2.out', overwrite: 'auto' });
+    gsap.to(S.arc, { drawSVG: `0% ${pct}%`, stroke: color, duration: instant ? 0 : 0.5, ease: 'power2.out', overwrite: 'auto' });
     gsap.to(S.lock, { stroke: color, duration: d, overwrite: 'auto' });
     gsap.set(S.lock.querySelector('.hole'), { fill: color });
     if (a.cracked !== S.open) {
@@ -610,8 +613,9 @@ export default {
     const d = instant ? 0 : 0.35;
     const r0 = you ? 36 : 26;
     gsap.killTweensOf(c);
-    if (!instant && state !== 'idle') gsap.fromTo(c, { attr: { r: r0 * 1.45 } }, { attr: { r: r0, fill: COLORS.fill, stroke: COLORS.stroke }, duration: 0.6, ease: 'back.out(3)' });
-    else gsap.to(c, { attr: { r: r0, fill: COLORS.fill, stroke: COLORS.stroke }, duration: d });
+    if (!instant && state !== 'idle') gsap.fromTo(c, { attr: { r: r0 * 1.45 } }, { attr: { r: r0 }, fill: COLORS.fill, stroke: COLORS.stroke, duration: 0.6, ease: 'back.out(3)' });
+    else gsap.to(c, { attr: { r: r0 }, fill: COLORS.fill, stroke: COLORS.stroke, duration: d });
+    if (you) gsap.to(node.querySelector('.nd-halo'), { opacity: state === 'red' ? 0 : 1, duration: d, overwrite: 'auto' });
     if (g) { gsap.to(g, { stroke: COLORS.ink, duration: d, overwrite: 'auto' }); gsap.to(g.querySelector('circle'), { fill: COLORS.ink, duration: d, overwrite: 'auto' }); }
   },
   _setNet(state, instant) {
@@ -629,9 +633,10 @@ export default {
     const txt = CAPTIONS[state] || CAPTIONS.idle;
     const col = state === 'red' ? '#ff3d7f' : state === 'green' ? '#34d399' : '#7dd3fc';
     S.capDot.style.background = col; S.capDot.style.boxShadow = `0 0 12px ${col}`;
-    if (S.caption.textContent === txt) return;
-    if (instant) { S.caption.textContent = txt; return; }
-    gsap.fromTo(S.caption, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5, ease: 'expo.out', onStart: () => { S.caption.textContent = txt; } });
+    if (S.caption.dataset.state === state) return;
+    S.caption.dataset.state = state;
+    if (instant) { gsap.killTweensOf(S.caption); gsap.set(S.caption, { opacity: 1, y: 0 }); S.caption.innerHTML = txt; return; }
+    gsap.fromTo(S.caption, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5, ease: 'expo.out', onStart: () => { S.caption.innerHTML = txt; } });
   },
 
   // ---------- 持續的小動畫 ----------
