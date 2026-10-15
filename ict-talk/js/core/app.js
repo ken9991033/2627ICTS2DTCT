@@ -239,11 +239,19 @@ export function createApp(stations, env) {
     const bands = [['社會層', 0.06], ['網絡層', 0.2], ['介面層', 0.36], ['程式層', 0.55], ['數據層', 0.72], ['硬件層', 0.88]];
     ovMap.innerHTML = '';
     bands.forEach(([n, y]) => { const b = document.createElement('div'); b.className = 'ov-band'; b.style.top = (y * 100) + '%'; b.textContent = n; ovMap.appendChild(b); });
-    const pts = stations.map((st, i) => {
-      const x = 0.1 + 0.86 * (i / Math.max(1, stations.length - 1));
-      const y = st.overviewY ?? (st.layer ? ({ world: 0.08, network: 0.22, surface: 0.38, code: 0.56, data: 0.72, chip: 0.88 })[st.layer] : 0.3);
-      return [x, y];
-    });
+    // 旅程站沿深度層「潛入再浮上」；其後各站排成「任務控制中心」
+    const POS = {
+      boot: [0.08, 0.36], phone: [0.17, 0.36], myth: [0.26, 0.36], blueprint: [0.35, 0.36],
+      code: [0.39, 0.55], data: [0.44, 0.72], chip: [0.5, 0.88], network: [0.56, 0.2], society: [0.62, 0.06], recap: [0.69, 0.2],
+      electives: [0.68, 0.44], 'el-db': [0.77, 0.44], 'el-web': [0.86, 0.44], 'el-algo': [0.95, 0.44],
+      sba: [0.95, 0.64], assess: [0.86, 0.64], future: [0.77, 0.64], fit: [0.68, 0.64],
+      faq: [0.68, 0.84], finale: [0.77, 0.84],
+    };
+    const pts = stations.map((st, i) => POS[st.id] || [0.08 + 0.88 * (i / Math.max(1, stations.length - 1)), 0.96]);
+    const mc = document.createElement('div');
+    mc.className = 'ov-band'; mc.style.cssText = 'left:71%;right:auto;top:36%;color:var(--ink-2)';
+    mc.textContent = '任務控制中心';
+    ovMap.appendChild(mc);
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     const W = 1000, H = 1000;
